@@ -66,13 +66,23 @@ Visit:
 
 ### 3. Deploy to Vercel
 
+**Current Status**: The template is configured for local development and includes a Vercel configuration. For production deployment, you may need to adjust the configuration based on your specific needs.
+
 ```bash
 # Install Vercel CLI
 npm i -g vercel
 
-# Deploy
+# Deploy (may require configuration adjustments)
 vercel
+
+# For production deployment
+vercel --prod
 ```
+
+**Note**: If you encounter runtime version issues, you can:
+1. Use only the frontend (Next.js) on Vercel and deploy the backend elsewhere
+2. Modify the Python function to use a simpler approach
+3. Use alternative deployment platforms for the backend (Railway, Render, etc.)
 
 ## 📁 Project Structure
 

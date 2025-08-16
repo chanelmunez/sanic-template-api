@@ -24,7 +24,25 @@ This guide provides detailed instructions for deploying your Sanic + Next.js app
 
 ## 🚀 Deployment Methods
 
-### Method 1: GitHub Integration (Recommended)
+## ⚠️ Current Status
+
+**Frontend**: ✅ Ready for Vercel deployment (Next.js)
+**Backend**: ⚠️ May require configuration adjustments for Vercel serverless functions
+
+The template is fully functional for local development. For production deployment, consider these options:
+
+### Option 1: Frontend-Only on Vercel
+Deploy only the Next.js frontend to Vercel and use a different platform for the Python backend:
+- **Frontend**: Vercel (recommended)
+- **Backend**: Railway, Render, DigitalOcean App Platform, or Heroku
+
+### Option 2: Full-Stack Alternative Platforms
+Deploy both frontend and backend to platforms that better support Python:
+- **Railway**: Excellent Python support with automatic deployments
+- **Render**: Good for full-stack applications
+- **DigitalOcean App Platform**: Supports both Next.js and Python
+
+### Method 1: GitHub Integration (Recommended for Frontend)
 
 1. **Push to GitHub**
    ```bash

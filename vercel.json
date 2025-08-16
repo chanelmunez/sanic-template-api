@@ -1,28 +1,13 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "next.config.js",
-      "use": "@vercel/next"
-    },
-    {
-      "src": "api/main.py",
-      "use": "@vercel/python"
+  "functions": {
+    "api/index.py": {
+      "runtime": "python@3.12"
     }
-  ],
+  },
   "routes": [
     {
-      "src": "/api/python/(.*)",
-      "dest": "/api/main.py"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "src": "/api/(.*)",
+      "dest": "/api/index.py"
     }
-  ],
-  "functions": {
-    "api/main.py": {
-      "runtime": "python3.12"
-    }
-  }
+  ]
 }
