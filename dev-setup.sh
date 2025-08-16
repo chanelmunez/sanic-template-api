@@ -9,9 +9,10 @@ if ! command -v node &> /dev/null; then
     exit 1
 fi
 
-# Check if Python is installed
-if ! command -v python3 &> /dev/null; then
-    echo "❌ Python3 is not installed. Please install Python3 first."
+# Check if Python 3.12 is installed
+if ! command -v python3.12 &> /dev/null; then
+    echo "❌ Python 3.12 is not installed. Please install Python 3.12 first."
+    echo "   This template requires Python 3.12 for Vercel compatibility."
     exit 1
 fi
 
@@ -19,10 +20,10 @@ fi
 echo "📦 Installing Node.js dependencies..."
 npm install
 
-# Create Python virtual environment
-echo "🐍 Setting up Python virtual environment..."
+# Create Python virtual environment with Python 3.12
+echo "🐍 Setting up Python virtual environment with Python 3.12..."
 cd api
-python3 -m venv venv
+python3.12 -m venv venv
 source venv/bin/activate
 
 # Install Python dependencies
@@ -35,6 +36,8 @@ echo "🎯 To start development:"
 echo "1. Frontend: npm run dev (in root directory)"
 echo "2. Backend: npm run python-dev (in root directory)"
 echo "   Or: cd api && source venv/bin/activate && python -m uvicorn main:app --reload --port 8000"
+echo ""
+echo "⚠️  Important: This template uses Python 3.12 for Vercel compatibility."
 echo ""
 echo "🌐 Application will be available at:"
 echo "- Frontend: http://localhost:3000"

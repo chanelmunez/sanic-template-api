@@ -32,8 +32,10 @@ A full-stack template application showcasing **Next.js 14 with TypeScript** fron
 ### Prerequisites
 
 - Node.js 18+ 
-- Python 3.9+
+- **Python 3.12** (required for Vercel compatibility)
 - npm or yarn
+
+⚠️ **Important**: This template specifically requires Python 3.12 for optimal Vercel serverless function compatibility. Python 3.13 is not yet fully supported by all dependencies.
 
 ### 1. Clone and Setup
 

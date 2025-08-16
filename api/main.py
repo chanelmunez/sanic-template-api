@@ -5,7 +5,6 @@ This file creates the Sanic app and imports all modules to build the complete AP
 
 from sanic import Sanic
 from sanic.response import json
-from sanic_cors import CORS
 from modules.database import init_db
 from modules.users import users_bp
 from modules.todos import todos_bp
@@ -15,16 +14,7 @@ def create_app() -> Sanic:
     """Create and configure the Sanic application."""
     app = Sanic("sanic_nextjs_template")
     
-    # Enable CORS for frontend communication
-    CORS(app, resources={
-        r"/api/*": {
-            "origins": ["*"],
-            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-            "allow_headers": ["Content-Type", "Authorization"]
-        }
-    })
-    
-    # Setup middleware
+    # Setup middleware (includes CORS)
     setup_middleware(app)
     
     # Initialize database

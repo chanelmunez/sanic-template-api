@@ -5,8 +5,9 @@ User management API endpoints.
 from sanic import Blueprint
 from sanic.request import Request
 from sanic.response import json, JSONResponse
-from pydantic import BaseModel, EmailStr, ValidationError
+from pydantic import BaseModel, ValidationError, field_validator
 from typing import List, Optional
+import re
 from .database import get_db
 
 # Create blueprint
@@ -15,11 +16,28 @@ users_bp = Blueprint("users")
 # Pydantic models for request validation
 class UserCreate(BaseModel):
     name: str
-    email: EmailStr
+    email: str
+    
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v):
+        pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+        if not re.match(pattern, v):
+            raise ValueError('Invalid email format')
+        return v
 
 class UserUpdate(BaseModel):
     name: Optional[str] = None
-    email: Optional[EmailStr] = None
+    email: Optional[str] = None
+    
+    @field_validator('email')
+    @classmethod
+    def validate_email(cls, v):
+        if v is not None:
+            pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+            if not re.match(pattern, v):
+                raise ValueError('Invalid email format')
+        return v
 
 class UserResponse(BaseModel):
     id: int

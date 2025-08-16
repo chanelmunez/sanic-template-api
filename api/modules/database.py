@@ -5,10 +5,9 @@ In production, this would be replaced with a real database like PostgreSQL or Mo
 
 from typing import List, Dict, Optional, Any
 from datetime import datetime
-import threading
 
 class MockDatabase:
-    """Thread-safe in-memory database for demonstration purposes."""
+    """Simple in-memory database for demonstration purposes."""
     
     def __init__(self):
         self._data: Dict[str, List[Dict[str, Any]]] = {
@@ -19,74 +18,65 @@ class MockDatabase:
             'users': 0,
             'todos': 0
         }
-        self._lock = threading.Lock()
     
     def _get_next_id(self, table: str) -> int:
         """Get the next ID for a table."""
-        with self._lock:
-            self._counters[table] += 1
-            return self._counters[table]
+        self._counters[table] += 1
+        return self._counters[table]
     
     def insert(self, table: str, data: Dict[str, Any]) -> Dict[str, Any]:
         """Insert a new record into the specified table."""
-        with self._lock:
-            record = {
-                'id': self._get_next_id(table),
-                **data,
-                'created_at': datetime.utcnow().isoformat()
-            }
-            self._data[table].append(record)
-            return record.copy()
+        record = {
+            'id': self._get_next_id(table),
+            **data,
+            'created_at': datetime.utcnow().isoformat()
+        }
+        self._data[table].append(record)
+        return record.copy()
     
     def find_all(self, table: str) -> List[Dict[str, Any]]:
         """Get all records from the specified table."""
-        with self._lock:
-            return [record.copy() for record in self._data[table]]
+        return [record.copy() for record in self._data[table]]
     
     def find_by_id(self, table: str, record_id: int) -> Optional[Dict[str, Any]]:
         """Find a record by ID."""
-        with self._lock:
-            for record in self._data[table]:
-                if record['id'] == record_id:
-                    return record.copy()
-            return None
+        for record in self._data[table]:
+            if record['id'] == record_id:
+                return record.copy()
+        return None
     
     def find_by_field(self, table: str, field: str, value: Any) -> List[Dict[str, Any]]:
         """Find records by a specific field value."""
-        with self._lock:
-            results = []
-            for record in self._data[table]:
-                if record.get(field) == value:
-                    results.append(record.copy())
-            return results
+        results = []
+        for record in self._data[table]:
+            if record.get(field) == value:
+                results.append(record.copy())
+        return results
     
     def update_by_id(self, table: str, record_id: int, updates: Dict[str, Any]) -> Optional[Dict[str, Any]]:
         """Update a record by ID."""
-        with self._lock:
-            for i, record in enumerate(self._data[table]):
-                if record['id'] == record_id:
-                    # Update the record
-                    for key, value in updates.items():
-                        if key != 'id':  # Don't allow ID updates
-                            record[key] = value
-                    record['updated_at'] = datetime.utcnow().isoformat()
-                    return record.copy()
-            return None
+        for i, record in enumerate(self._data[table]):
+            if record['id'] == record_id:
+                # Update the record
+                for key, value in updates.items():
+                    if key != 'id':  # Don't allow ID updates
+                        record[key] = value
+                record['updated_at'] = datetime.utcnow().isoformat()
+                return record.copy()
+        return None
     
     def delete_by_id(self, table: str, record_id: int) -> bool:
         """Delete a record by ID."""
-        with self._lock:
-            for i, record in enumerate(self._data[table]):
-                if record['id'] == record_id:
-                    del self._data[table][i]
-                    return True
-            return False
+        for i, record in enumerate(self._data[table]):
+            if record['id'] == record_id:
+                del self._data[table][i]
+                return True
+        return False
     
     def clear_table(self, table: str) -> None:
         """Clear all records from a table."""
-        with self._lock:
-            self._data[table] = []
-            self._counters[table] = 0
+        self._data[table] = []
+        self._counters[table] = 0
 
 # Global database instance
 db = MockDatabase()

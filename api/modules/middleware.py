@@ -4,7 +4,7 @@ Middleware setup for the Sanic application.
 
 from sanic import Sanic
 from sanic.request import Request
-from sanic.response import HTTPResponse
+from sanic.response import HTTPResponse, json
 import time
 import logging
 
@@ -34,6 +34,12 @@ def setup_middleware(app: Sanic) -> None:
         response.headers["Access-Control-Allow-Origin"] = "*"
         response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
         response.headers["Access-Control-Allow-Headers"] = "Content-Type, Authorization"
+        response.headers["Access-Control-Max-Age"] = "86400"
+    
+    @app.options("/<path:path>")
+    async def options_handler(request: Request, path: str):
+        """Handle preflight CORS requests."""
+        return json({}, status=200)
     
     @app.exception(Exception)
     async def handle_exception(request: Request, exception: Exception):
